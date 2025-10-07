@@ -135,82 +135,43 @@ const calculateReadTime = (content) => {
 
 const fetchHealthNews = async () => {
   try {
-    // Use multiple smaller queries to avoid hitting the 500 character limit
-    const queries = [
-      'health OR medical OR healthcare OR medicine',
-      'disease OR treatment OR therapy OR surgery',
-      'cancer OR diabetes OR heart OR brain',
-      'nutrition OR fitness OR wellness OR mental health',
-      'covid OR virus OR infection OR vaccine',
-      'clinical trial OR medical study OR research'
-    ];
-    
-    let allArticles = [];
-    const seenArticles = new Map();
-    let articleId = 1;
-    
-    // Fetch articles from each query
-    for (const query of queries) {
-      const queryParams = new URLSearchParams({
-        q: query,
-        language: 'en',
-        sortBy: 'publishedAt',
-        pageSize: '20', // Smaller page size per query
-        from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        to: new Date().toISOString().split('T')[0],
-        apiKey: NEWS_API_KEY
-      });
+    // Use top-headlines endpoint with health category
+    const queryParams = new URLSearchParams({
+      country: 'us',
+      category: 'health',
+      apiKey: NEWS_API_KEY
+    });
 
-      try {
-        const response = await axios.get(`${NEWS_API_BASE_URL}/everything?${queryParams}`);
-        
-        if (response.data.status === 'ok') {
-          console.log(`Fetched ${response.data.articles.length} articles for query: ${query}`);
-          
-          const articles = response.data.articles
-            .map((article) => ({
-              id: articleId++,
-              title: article.title || 'No title available',
-              content: article.content || article.description || 'No content available',
-              source: article.source?.name || 'Unknown source',
-              publishedAt: article.publishedAt || new Date().toISOString(),
-              category: categorizeArticle(article.title, article.content),
-              readTime: calculateReadTime(article.content || article.description),
-              url: article.url,
-              urlToImage: article.urlToImage,
-              author: article.author,
-              uniqueKey: article.title?.toLowerCase().trim()
-            }))
-            .filter(article => {
-              // Filter out non-health articles
-              if (article.category === 'Non-Health') {
-                return false;
-              }
-              
-              // Filter out duplicates based on title
-              if (seenArticles.has(article.uniqueKey)) {
-                return false;
-              }
-              
-              seenArticles.set(article.uniqueKey, article);
-              return true;
-            });
-          
-          allArticles = [...allArticles, ...articles];
-        }
-      } catch (queryError) {
-        console.error(`Error fetching articles for query "${query}":`, queryError.message);
-        // Continue with other queries even if one fails
-      }
+    const response = await axios.get(`${NEWS_API_BASE_URL}/top-headlines?${queryParams}`);
+    
+    if (response.data.status === 'ok') {
+      console.log(`Fetched ${response.data.articles.length} health articles`);
+      
+      let articleId = 1;
+      const articles = response.data.articles
+        .map((article) => ({
+          id: articleId++,
+          title: article.title || 'No title available',
+          content: article.content || article.description || 'No content available',
+          source: article.source?.name || 'Unknown source',
+          publishedAt: article.publishedAt || new Date().toISOString(),
+          category: categorizeArticle(article.title, article.content),
+          readTime: calculateReadTime(article.content || article.description),
+          url: article.url,
+          urlToImage: article.urlToImage,
+          author: article.author,
+          uniqueKey: article.title?.toLowerCase().trim()
+        }))
+        .filter(article => {
+          // Filter out non-health articles (additional safety check)
+          return article.category !== 'Non-Health';
+        });
+      
+      console.log(`Total health-related articles: ${articles.length}`);
+      return articles;
+    } else {
+      throw new Error(`NewsAPI error: ${response.data.message || 'Unknown error'}`);
     }
-    
-    // Sort by published date and limit to 50 articles
-    const healthArticles = allArticles
-      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
-      .slice(0, 50);
-    
-    console.log(`Total health-related articles after all queries: ${healthArticles.length}`);
-    return healthArticles;
     
   } catch (error) {
     console.error('Error fetching health news:', error);
@@ -623,15 +584,21 @@ app.post('/api/articles/refresh', async (req, res) => {
     
     
     const articles = await fetchHealthNews();
-    const processedArticles = await processArticlesWithAI(articles);
     
+    // Return basic articles without AI processing - AI processing happens on-demand when viewing articles
+    const basicArticles = articles.map(article => ({
+      ...article,
+      tldr: null,
+      keyTakeaways: null,
+      isSummarized: false
+    }));
     
-    articlesCache = processedArticles;
+    articlesCache = basicArticles;
     lastFetchTime = Date.now();
     
     res.json({
       success: true,
-      articles: processedArticles,
+      articles: basicArticles,
       message: 'Articles refreshed successfully'
     });
   } catch (error) {
@@ -699,9 +666,16 @@ cron.schedule('*/30 * * * *', async () => {
   console.log('Running scheduled article refresh...');
   try {
     const articles = await fetchHealthNews();
-    const processedArticles = await processArticlesWithAI(articles);
     
-    articlesCache = processedArticles;
+    // Return basic articles without AI processing - AI processing happens on-demand when viewing articles
+    const basicArticles = articles.map(article => ({
+      ...article,
+      tldr: null,
+      keyTakeaways: null,
+      isSummarized: false
+    }));
+    
+    articlesCache = basicArticles;
     lastFetchTime = Date.now();
     
     console.log('Articles refreshed successfully');
