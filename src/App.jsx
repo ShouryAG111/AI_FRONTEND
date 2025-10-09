@@ -47,7 +47,6 @@ function App() {
       }
     } catch (err) {
       console.error('Error loading articles:', err);
-      // Suppress error display in UI but ensure articles array is set
       setArticles([]);
       setError(null);
     } finally {
@@ -70,7 +69,6 @@ function App() {
       }
     } catch (err) {
       console.error('Error refreshing articles:', err);
-      // Suppress error display in UI
       setError(null);
     } finally {
       setRefreshing(false);
@@ -103,8 +101,6 @@ function App() {
           <main className="container mx-auto px-4 py-8">
             <div className="max-w-7xl mx-auto">
             <AnimatePresence>
-              {/* Error display suppressed - errors are handled silently */}
-
               {loading && <LoadingScreen />}
 
               {!loading && !isExpanded && (

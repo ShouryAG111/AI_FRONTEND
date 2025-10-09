@@ -83,7 +83,6 @@ const ExpandedArticleScreen = ({ article, onBack }) => {
       exit={{ opacity: 0, x: 20 }}
       className="max-w-4xl mx-auto"
     >
-      {/* Back Button */}
       <motion.button
         whileHover={{ x: -4 }}
         whileTap={{ scale: 0.95 }}
@@ -94,7 +93,6 @@ const ExpandedArticleScreen = ({ article, onBack }) => {
         <span className="font-medium">Back to Feed</span>
       </motion.button>
 
-      {/* Article Header */}
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -126,7 +124,6 @@ const ExpandedArticleScreen = ({ article, onBack }) => {
             </div>
           </div>
 
-          {/* TL;DR Section */}
           {article.tldr && (
             <div className="p-6 bg-red-50/50 rounded-lg border border-red-100 mb-8">
               <div className="text-sm font-semibold text-red-600 uppercase tracking-wider mb-3">
@@ -136,7 +133,6 @@ const ExpandedArticleScreen = ({ article, onBack }) => {
             </div>
           )}
 
-          {/* Key Takeaways */}
           {article.keyTakeaways && article.keyTakeaways.length > 0 && (
             <div className="mb-8">
               <div className="text-lg font-semibold text-gray-900 mb-4">Key Insights</div>
@@ -152,7 +148,6 @@ const ExpandedArticleScreen = ({ article, onBack }) => {
           )}
         </header>
 
-        {/* Simplified Content */}
         <div className="px-8 pb-8">
           {loading && (
             <div className="flex items-center justify-center py-16">
@@ -190,7 +185,6 @@ const ExpandedArticleScreen = ({ article, onBack }) => {
             />
           )}
 
-          {/* Regenerate Button */}
           {simplifiedContent && !loading && (
             <div className="mt-12 pt-8 border-t border-gray-200 text-center">
               <button

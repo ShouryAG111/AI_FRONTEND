@@ -12,7 +12,6 @@ const FeedScreen = ({ articles, onArticleClick, onArticlesUpdate }) => {
   const [error, setError] = useState(null);
   const [processingArticles, setProcessingArticles] = useState(new Set());
 
-  // Function to deduplicate articles by title
   const deduplicateArticles = (articles) => {
     const seen = new Set();
     return articles.filter(article => {
@@ -74,7 +73,6 @@ const FeedScreen = ({ articles, onArticleClick, onArticlesUpdate }) => {
       const response = await apiService.getArticles(nextPage);
       
       if (response.success && response.articles.length > 0) {
-        // Combine existing and new articles, then deduplicate
         const combinedArticles = [...allArticles, ...response.articles];
         const deduplicatedArticles = deduplicateArticles(combinedArticles);
         
@@ -90,7 +88,6 @@ const FeedScreen = ({ articles, onArticleClick, onArticlesUpdate }) => {
       }
     } catch (err) {
       console.error('Error loading more articles:', err);
-      // Suppress error display in UI
       setError(null);
     } finally {
       setLoading(false);
@@ -186,8 +183,6 @@ const FeedScreen = ({ articles, onArticleClick, onArticlesUpdate }) => {
             </button>
           </motion.div>
         )}
-
-        {/* Error display suppressed - errors are handled silently */}
 
         {!hasMore && allArticles.length > 0 && (
           <motion.div

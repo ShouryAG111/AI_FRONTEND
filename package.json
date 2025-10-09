@@ -1,7 +1,7 @@
 {
   "name": "health-news-summarizer",
   "version": "1.0.0",
-  "description": "A modern frontend web application that provides AI-powered health news summarization and analysis.",
+  "description": "Health News Intelligence Platform - AI-powered health news summarization and analysis",
   "main": "src/main.jsx",
   "type": "module",
   "scripts": {
@@ -14,24 +14,22 @@
   "license": "MIT",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@tanstack/react-query": "^4.36.1",
+    "@tanstack/react-query": "^5.59.0",
     "axios": "^1.6.2",
-    "framer-motion": "^10.16.5",
+    "framer-motion": "^11.15.0",
     "lucide-react": "^0.460.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
-    "@vitejs/plugin-react": "^4.2.0",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.53.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
-    "vite": "^5.0.0"
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
+    "vite": "^5.4.20"
   }
 }

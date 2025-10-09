@@ -1,24 +1,19 @@
 import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// API Configuration
 const NEWS_API_KEY = 'a67cd1c83bf8427c8a6408352e8002a4';
 const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
 const GEMINI_API_KEY = 'AIzaSyBP8WHdlnBsz2BYSwUVKe8L1lQ0uCVkL08';
 
-// Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-// Cache for articles
 let articlesCache = [];
 let lastFetchTime = null;
-const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+const CACHE_DURATION = 30 * 60 * 1000;
 
-// Simple categorization based on basic health keywords
 const categorizeArticle = (title, content) => {
   const text = `${title} ${content}`.toLowerCase();
   
-  // Basic health categorization
   if (text.includes('mental health') || text.includes('psychology') || text.includes('depression') || text.includes('anxiety') || text.includes('brain') || text.includes('mental')) {
     return 'Mental Health';
   } else if (text.includes('cancer') || text.includes('disease') || text.includes('covid') || text.includes('virus') || text.includes('infection') || text.includes('diabetes') || text.includes('heart')) {
@@ -42,7 +37,6 @@ const calculateReadTime = (content) => {
   return `${readTime} min read`;
 };
 
-// Main service functions
 export const healthNewsService = {
   async fetchHealthNews() {
     try {
@@ -71,7 +65,6 @@ export const healthNewsService = {
             urlToImage: article.urlToImage,
             author: article.author,
             uniqueKey: article.title?.toLowerCase().trim(),
-            // Initialize without AI processing
             tldr: null,
             keyTakeaways: null,
             isSummarized: false
@@ -92,7 +85,6 @@ export const healthNewsService = {
     try {
       const pageSize = 5;
       
-      // Check cache first
       if (articlesCache.length > 0 && lastFetchTime && (Date.now() - lastFetchTime) < CACHE_DURATION) {
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
@@ -108,7 +100,6 @@ export const healthNewsService = {
         };
       }
 
-      // Fetch new articles (already includes basic structure without AI processing)
       const articles = await this.fetchHealthNews();
       
       articlesCache = articles;
@@ -129,7 +120,6 @@ export const healthNewsService = {
     } catch (error) {
       console.error('Error getting articles:', error);
       
-      // Return cached articles if available
       if (articlesCache.length > 0) {
         const pageSize = 5;
         const startIndex = (page - 1) * pageSize;
@@ -156,8 +146,7 @@ export const healthNewsService = {
 
   async summarizeArticle(article) {
     try {
-      const prompt = `
-        Analyze this health news article and create a crisp, professional medical summary.
+      const prompt = `Analyze this health news article and create a crisp, professional medical summary.
         
         Article Title: ${article.title}
         Article Content: ${article.content}
@@ -183,8 +172,7 @@ export const healthNewsService = {
             "Key health implication or recommendation", 
             "Important medical fact or research conclusion"
           ]
-        }
-      `;
+        }`;
 
       const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
       const result = await model.generateContent(prompt);
@@ -223,8 +211,7 @@ export const healthNewsService = {
 
   async simplifyArticle(article) {
     try {
-      const prompt = `
-        Please rewrite this health news article in a professional, accessible tone for a general audience. 
+      const prompt = `Please rewrite this health news article in a professional, accessible tone for a general audience. 
         
         Article Title: ${article.title}
         Article Content: ${article.content}
@@ -238,8 +225,7 @@ export const healthNewsService = {
         - Focus on medical facts, implications, and evidence-based information
         - Keep the tone informative and authoritative but accessible
         
-        Return the rewritten article as plain text.
-      `;
+        Return the rewritten article as plain text.`;
 
       const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
       const result = await model.generateContent(prompt);
@@ -287,7 +273,6 @@ export const healthNewsService = {
         simplifiedContent = `We're experiencing high demand for AI processing right now. Here's the original article content:\n\n${article.content}\n\nFor the best experience, please try again later when AI processing is available.`;
       }
       
-      // Ensure we always have content even if AI processing fails
       if (!summary || !summary.tldr) {
         summary = {
           tldr: `Health news: ${article.title}. This article discusses important health-related information that requires professional medical interpretation.`,
@@ -354,11 +339,9 @@ export const healthNewsService = {
 
   async refreshArticles() {
     try {
-      // Clear cache
       articlesCache = [];
       lastFetchTime = null;
       
-      // Fetch new articles (already includes basic structure without AI processing)
       const articles = await this.fetchHealthNews();
       
       articlesCache = articles;
