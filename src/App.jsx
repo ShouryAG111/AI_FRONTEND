@@ -41,6 +41,7 @@ function App() {
       if (response.success && response.articles) {
         console.log('Setting articles:', response.articles.length);
         setArticles(response.articles);
+        
       } else {
         console.error('Failed to load articles - no articles in response');
         setArticles([]);

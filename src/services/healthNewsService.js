@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const NEWS_API_KEY = 'a67cd1c83bf8427c8a6408352e8002a4';
-const NEWS_API_BASE_URL = 'https://newsapi.org/v2';
+const NEWS_API_BASE_URL = '/api/news';
 const GEMINI_API_KEY = 'AIzaSyBP8WHdlnBsz2BYSwUVKe8L1lQ0uCVkL08';
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
@@ -40,13 +40,16 @@ const calculateReadTime = (content) => {
 export const healthNewsService = {
   async fetchHealthNews() {
     try {
-      const queryParams = new URLSearchParams({
-        country: 'us',
-        category: 'health',
-        apiKey: NEWS_API_KEY
+      console.log('Fetching health news via Vercel API...');
+      const response = await axios.get(NEWS_API_BASE_URL, {
+        headers: {
+          'Accept': 'application/json',
+        },
+        timeout: 10000
       });
-
-      const response = await axios.get(`${NEWS_API_BASE_URL}/top-headlines?${queryParams}`);
+      
+      console.log('API Response Status:', response.status);
+      console.log('API Response Data:', response.data);
       
       if (response.data.status === 'ok') {
         console.log(`Fetched ${response.data.articles.length} health articles`);
@@ -73,13 +76,14 @@ export const healthNewsService = {
         console.log(`Total health articles: ${articles.length}`);
         return articles;
       } else {
-        throw new Error(`NewsAPI error: ${response.data.message || 'Unknown error'}`);
+        throw new Error(`API error: ${response.data.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error fetching health news:', error);
       throw error;
     }
   },
+
 
   async getArticles(page = 1) {
     try {

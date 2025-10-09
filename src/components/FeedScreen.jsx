@@ -130,6 +130,21 @@ const FeedScreen = ({ articles, onArticleClick, onArticlesUpdate }) => {
           <p className="text-gray-600 text-xl max-w-2xl mx-auto leading-relaxed">
             Curated health news with AI-powered insights and simplified explanations
           </p>
+          
+          {showFallbackNotice && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg max-w-2xl mx-auto"
+            >
+              <div className="flex items-center justify-center text-yellow-800">
+                <div className="w-4 h-4 mr-2">⚠️</div>
+                <span className="text-sm font-medium">
+                  Showing sample articles due to API limitations. In production, this would display live health news.
+                </span>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-6">
