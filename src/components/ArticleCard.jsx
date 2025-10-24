@@ -45,7 +45,6 @@ const ArticleCard = ({ article, onClick, isProcessing = false }) => {
       onClick={onClick}
       className="bg-white rounded-xl shadow-sm hover:shadow-lg cursor-pointer group transition-all duration-300 border border-gray-200/50 overflow-hidden hover:border-red-200"
     >
-      {/* Header */}
       <div className="p-6 pb-4">
         <div className="flex items-start justify-between mb-4">
           <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${getCategoryColor(article.category)}`}>
@@ -57,12 +56,10 @@ const ArticleCard = ({ article, onClick, isProcessing = false }) => {
           </div>
         </div>
 
-        {/* Title */}
         <h3 className="text-lg font-semibold text-gray-900 mb-4 line-clamp-2 group-hover:text-red-600 transition-colors duration-200 leading-snug">
           {article.title}
         </h3>
 
-        {/* AI Processing Status */}
         {isProcessing && (
           <div className="mb-4 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
             <div className="flex items-center text-blue-700">
@@ -72,7 +69,6 @@ const ArticleCard = ({ article, onClick, isProcessing = false }) => {
           </div>
         )}
 
-        {/* TL;DR Section */}
         {article.tldr && (
           <div className="mb-4 p-4 bg-red-50/50 rounded-lg border border-red-100">
             <div className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-2">
@@ -84,7 +80,6 @@ const ArticleCard = ({ article, onClick, isProcessing = false }) => {
           </div>
         )}
 
-        {/* Key Takeaways */}
         {article.keyTakeaways && article.keyTakeaways.length > 0 && (
           <div className="mb-4">
             <div className="text-sm font-medium text-gray-800 mb-3">Key Points</div>
@@ -99,8 +94,6 @@ const ArticleCard = ({ article, onClick, isProcessing = false }) => {
           </div>
         )}
       </div>
-
-      {/* Footer */}
       <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100">
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center space-x-6 text-gray-500">

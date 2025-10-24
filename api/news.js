@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
   console.log('API News handler called:', req.method, req.url);
   
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');

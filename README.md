@@ -1,194 +1,182 @@
-# Health News Intelligence Platform
+# Health News Reader
 
-A modern React-based web application that provides AI-powered health news summarization and analysis. The platform fetches health news from NewsAPI and uses Google Gemini AI to generate intelligent summaries, key insights, and simplified content for better readability.
+A React web application that displays health news articles with AI-generated summaries. The app fetches health news from NewsAPI and uses Google Gemini AI to provide article summaries when requested.
 
-## Project Overview
+## Overview
 
-This application serves as a comprehensive health news intelligence platform that:
+This application provides a clean interface for browsing health-related news articles. Users can view article headlines, descriptions, and request AI-generated summaries for detailed articles. The app is designed to be lightweight and efficient, processing articles on-demand to optimize API usage.
 
-- **Aggregates** health news from NewsAPI using category-based filtering
-- **Processes** articles with AI-powered summarization and analysis on-demand
-- **Presents** curated health information in a modern, responsive interface
-- **Optimizes** performance through intelligent caching and on-demand processing
+## Features
 
-## Key Features
-
-### News Aggregation
-- Real-time health news from NewsAPI
-- Simple category-based filtering (health category)
-- Intelligent article categorization
-- Pagination support for large datasets
-
-### AI-Powered Processing
-- Google Gemini 2.5 Flash Lite for article summarization
-- On-demand AI processing to conserve API quotas
-- Executive summaries (TL;DR) for quick understanding
-- Key insights extraction with bullet points
-- Content simplification for better readability
-
-### User Experience
-- Modern, responsive interface built with React and Tailwind CSS
-- Smooth animations and transitions using Framer Motion
-- Real-time loading states and error handling
+- Health news aggregation from NewsAPI
+- AI-powered article summarization using Google Gemini
+- Responsive web interface built with Tailwind CSS
+- Article pagination for browsing multiple articles
+- Loading states and comprehensive error handling
+- Smooth animations and transitions
 - Mobile-first responsive design
-- Professional medical news presentation
-
-### Technical Excellence
-- Frontend-only architecture (no backend required)
-- Efficient API quota management
-- Intelligent caching system
-- Error resilience and fallback mechanisms
-- Clean, maintainable codebase
+- Intelligent caching to reduce API calls
 
 ## Technology Stack
 
-### Frontend
-- **React 19.1.1** - Modern UI framework
-- **Vite** - Fast build tool and development server
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** - Animation library
-- **TanStack Query** - Data fetching and caching
-- **Lucide React** - Icon system
+### Frontend Technologies
+- **React 19.1.1** - Modern UI framework with hooks and functional components
+- **Vite** - Fast build tool and development server with HMR
+- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- **Framer Motion** - Animation library for smooth transitions and interactions
 
-### External APIs
-- **NewsAPI** - Health news aggregation
+### Data Management
+- **TanStack Query** - Data fetching, caching, and synchronization
+- **Lucide React** - Consistent icon system
+
+### External Services
+- **NewsAPI** - Health news aggregation service
 - **Google Gemini AI** - Content summarization and analysis
 
-## Architecture
+### Development Tools
+- **ESLint** - Code linting and quality assurance
+- **PostCSS** - CSS processing and optimization
 
-The application follows a modern frontend architecture with clear separation of concerns:
-
-```
-┌─────────────────┐    ┌─────────────────┐
-│   NewsAPI       │    │   Frontend      │
-│   (External)    │───▶│   (React)       │
-│                 │    │   Port 3000     │
-└─────────────────┘    └─────────────────┘
-                              │
-                              ▼
-                       ┌─────────────────┐
-                       │   Gemini AI     │
-                       │   (Processing)  │
-                       └─────────────────┘
-```
-
-### Data Flow
-1. **NewsAPI** provides health news articles
-2. **Frontend** fetches and caches articles
-3. **Gemini AI** processes articles on-demand when clicked
-4. **UI** displays processed content to users
-
-## Installation and Setup
+## Installation
 
 ### Prerequisites
 - Node.js >= 18.0.0
 - npm >= 8.0.0
-- NewsAPI key (free tier: 1000 requests/day)
+- NewsAPI key (free tier available)
 - Google Gemini API key (free tier available)
 
-### Installation
+### Setup
 
-1. **Clone the repository**
+1. Clone the repository
 ```bash
 git clone <repository-url>
 cd Health
 ```
 
-2. **Install dependencies**
+2. Install dependencies
 ```bash
 npm install
 ```
 
-3. **Configure API keys**
-The application is pre-configured with API keys for immediate use. For production deployment, replace the hardcoded keys in `src/services/healthNewsService.js`:
-
+3. Configure API keys in `src/services/healthNewsService.js`:
 ```javascript
 const NEWS_API_KEY = 'your_news_api_key_here';
 const GEMINI_API_KEY = 'your_gemini_api_key_here';
 ```
 
-4. **Start the development server**
+4. Start the development server
 ```bash
 npm run dev
 ```
 
 The application will be available at `http://localhost:3000`
 
+### API Key Setup
+
+#### NewsAPI
+1. Visit [NewsAPI.org](https://newsapi.org/)
+2. Sign up for a free account
+3. Copy your API key from the dashboard
+4. Replace the placeholder in the service file
+
+#### Google Gemini AI
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a new API key
+3. Replace the placeholder in the service file
+
 ## Usage
 
 ### Basic Workflow
-1. **View Articles**: Browse the health news feed on the main page
-2. **Click Article**: Click on any article to trigger AI processing
-3. **Read Summary**: View AI-generated executive summary and key insights
-4. **Read Simplified Content**: Access AI-rewritten content for better understanding
-5. **Load More**: Use pagination to load additional articles
+1. **Browse Articles**: View health news headlines and descriptions on the main page
+2. **Select Article**: Click on any article to expand and view full details
+3. **AI Summary**: Click "Get AI Summary" to generate an intelligent summary
+4. **Pagination**: Use the "Load More" button to fetch additional articles
+5. **Navigation**: Use the back button to return to the article feed
 
-### AI Processing
-- AI processing only occurs when you click on a specific article
-- This approach conserves API quotas and improves performance
-- Each article is processed once and cached for future viewing
-- Fallback content is provided if AI processing fails
+### User Interface
+- **Main Feed**: Displays article cards with headlines, descriptions, and publication info
+- **Article Detail**: Shows full article content with source information
+- **Loading States**: Visual feedback during data fetching and AI processing
+- **Error Handling**: Graceful error messages and fallback content
 
-## API Integration
+## How It Works
 
-### NewsAPI Integration
-- Uses the `top-headlines` endpoint with `category=health`
-- Fetches articles from US sources
-- Implements intelligent caching to reduce API calls
-- Handles rate limiting and error scenarios gracefully
+### Data Flow
+1. **News Fetching**: Application fetches health news from NewsAPI on startup
+2. **Article Display**: Articles are displayed in a paginated feed format
+3. **On-Demand Processing**: AI summarization only occurs when user clicks "Get AI Summary"
+4. **Caching**: Processed summaries are cached to avoid redundant API calls
+5. **Fallback**: Original article content is shown if AI processing fails
 
-### Gemini AI Integration
-- Uses Gemini 2.5 Flash Lite model for optimal performance
-- Generates executive summaries and key insights
-- Simplifies complex medical content for general audience
-- Implements fallback mechanisms for quota limits
-
-## Performance Characteristics
-
-### Caching Strategy
-- 30-minute cache duration for fetched articles
-- In-memory article storage with pagination
-- On-demand AI processing to minimize API usage
-- Efficient deduplication system
-
-### API Efficiency
-- NewsAPI: Uses simple category filtering (1 API call per refresh)
-- Gemini AI: Only processes articles when clicked by user
-- Intelligent error handling and fallback mechanisms
-- Optimized for free tier API limits
+### Performance Optimization
+- Articles are fetched once and stored in memory
+- AI processing is triggered only when needed
+- Caching reduces API quota usage
+- Pagination prevents overwhelming the interface
 
 ## File Structure
 
 ```
 src/
 ├── components/
-│   ├── ArticleCard.jsx          # Article display component
-│   ├── ErrorBoundary.jsx        # Error handling component
-│   ├── ExpandedArticleScreen.jsx # Full article view
-│   ├── FeedScreen.jsx           # Main article feed
-│   ├── Header.jsx               # Application header
-│   └── LoadingScreen.jsx        # Loading states
+│   ├── ArticleCard.jsx          # Individual article display component
+│   ├── ErrorBoundary.jsx        # Error handling and fallback UI
+│   ├── ExpandedArticleScreen.jsx # Full article view with AI summary
+│   ├── FeedScreen.jsx           # Main article feed and pagination
+│   ├── Header.jsx               # Application header and navigation
+│   └── LoadingScreen.jsx        # Loading states and spinners
 ├── services/
-│   ├── api.js                   # API service layer
-│   └── healthNewsService.js     # Core business logic
-├── App.jsx                      # Main application component
-├── main.jsx                     # Application entry point
-└── index.css                    # Global styles
+│   ├── api.js                   # Generic API service utilities
+│   └── healthNewsService.js     # News API and AI integration logic
+├── App.jsx                      # Main application component and routing
+├── main.jsx                     # Application entry point and providers
+└── index.css                    # Global styles and Tailwind imports
 ```
+
+### Key Components
+
+- **FeedScreen**: Manages the article feed, pagination, and initial data loading
+- **ExpandedArticleScreen**: Handles individual article display and AI summary generation
+- **ArticleCard**: Reusable component for displaying article previews
+- **ErrorBoundary**: Catches and handles application errors gracefully
+- **healthNewsService**: Core service handling NewsAPI and Gemini AI integration
 
 ## Development
 
 ### Available Scripts
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
 
-### Code Quality
-- Clean, comment-free codebase
-- Consistent naming conventions
-- Modern React patterns and hooks
-- Responsive design principles
-- Error boundary implementation
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build optimized production bundle
+- `npm run preview` - Preview production build locally
+
+### Development Guidelines
+
+- Use functional components with React hooks
+- Follow consistent naming conventions (camelCase for variables, PascalCase for components)
+- Implement proper error boundaries for component error handling
+- Use Tailwind CSS classes for styling
+- Maintain responsive design principles
+
+### Code Structure
+
+- Components are organized by functionality
+- Services handle external API interactions
+- Error handling is implemented at component and service levels
+- State management uses React's built-in hooks and context
+
+## API Configuration
+
+### NewsAPI Integration
+- Uses the `top-headlines` endpoint
+- Filters for health category articles
+- Implements request caching to optimize API usage
+- Handles rate limiting and error responses
+
+### Google Gemini AI Integration
+- Uses Gemini 2.5 Flash Lite model
+- Generates executive summaries and key insights
+- Implements retry logic for failed requests
+- Provides fallback content when AI processing fails
 
 ## Deployment
 
@@ -197,55 +185,46 @@ src/
 npm run build
 ```
 
-### Static Hosting
+### Deployment Options
+
 The application can be deployed to any static hosting service:
-- Vercel
-- Netlify
-- GitHub Pages
-- AWS S3 + CloudFront
 
-### Environment Variables
-For production deployment, ensure API keys are properly configured in the service files.
+- **Vercel**: Recommended for easy deployment with automatic builds
+- **Netlify**: Good for continuous deployment from Git repositories
+- **GitHub Pages**: Free hosting for public repositories
+- **AWS S3 + CloudFront**: Enterprise-grade static hosting
 
-## Browser Support
+### Environment Configuration
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+For production deployment, ensure:
+- API keys are properly configured
+- CORS settings allow your domain
+- HTTPS is enabled for secure API communication
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Errors**: Verify API keys are correctly set in `healthNewsService.js`
+2. **CORS Issues**: Ensure your domain is whitelisted in API settings
+3. **Rate Limiting**: Check API quota limits and implement appropriate delays
+4. **Build Failures**: Ensure all dependencies are installed and Node.js version is compatible
+
+### Performance Tips
+
+- Monitor API usage to stay within free tier limits
+- Implement proper caching strategies
+- Optimize images and assets for faster loading
+- Use browser dev tools to identify performance bottlenecks
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 MIT License - see LICENSE file for details.
-
-## Project Status
-
-**Current Version**: 1.0.0
-
-**System Status**: Fully operational
-- Frontend: React application running on port 3000
-- NewsAPI: Health news aggregation working
-- Gemini AI: On-demand processing functional
-- Performance: Optimized for API quota conservation
-
-## Conclusion
-
-This Health News Intelligence Platform demonstrates modern web development practices with a focus on user experience, performance optimization, and efficient API usage. The application successfully combines external data sources with AI processing to deliver a professional health news consumption experience.
-
-**Key Achievements:**
-- Efficient frontend-only architecture
-- On-demand AI processing for quota conservation
-- Professional medical news presentation
-- Responsive design for all devices
-- Clean, maintainable codebase
-- Comprehensive error handling
-
-The platform is production-ready and showcases best practices in React development, API integration, and user experience design.
